@@ -2,6 +2,9 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import '@/utils/element.js'
+// 主题色定制
+import '@/styles/index.scss'
 
 Vue.config.productionTip = false
 
