@@ -2,17 +2,18 @@
   <div class="login-page">
     <el-card class="el-card">
       <template #header>黑马面经运营后台</template>
-      <el-form>
-        <el-form-item lable="用户名：">
-          <el-input placeholder="请输入用户名"></el-input>
+      <!-- 表单提交校验 -->
+      <el-form :model="form" :rules="rules" ref="loginForm">
+        <el-form-item lable="用户名：" prop="username">
+          <el-input placeholder="请输入用户名" v-model="form.username"></el-input>
         </el-form-item>
-        <el-form-item lable="密码：">
-          <el-input placeholder="请输入密码："></el-input>
+        <el-form-item lable="密码：" prop="password">
+          <el-input placeholder="请输入密码：" v-model="form.password" show-password></el-input>
         </el-form-item>
-        <el-from-item>
-          <el-button type="primary">登录</el-button>
-          <el-button>重置</el-button>
-        </el-from-item>
+        <el-form-item>
+          <el-button type="primary" @click="login">登录</el-button>
+          <el-button @click="resert">重置</el-button>
+        </el-form-item>
       </el-form>
     </el-card>
   </div>
@@ -20,7 +21,42 @@
 
 <script>
 export default {
-  name: 'LoginIndex'
+  name: 'LoginIndex',
+  data () {
+    return {
+      // element-ui校验
+      form: {
+        username: '',
+        password: ''
+      },
+      rules: {
+        username: [
+          { required: true, message: '请输入用户名', trigger: ['blur', 'change'] },
+          { min: 5, max: 11, message: '长度在 5 到 11 个字符', trigger: ['blur', 'change'] }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: ['blur', 'change'] },
+          { pattern: /^\w{5,11}$/, message: '长度在 5 到 10 个字符', trigger: ['blur', 'change'] }
+        ]
+      }
+    }
+  },
+  methods: {
+    // 登录表单校验
+    login () {
+      this.$refs.loginForm.validate(valid => {
+        if (!valid) {
+          return
+        }
+        console.log('success')
+      })
+    },
+    // 重置表单
+    resert () {
+      this.$refs.form.validateField()
+    }
+  }
+
 }
 </script>
 
