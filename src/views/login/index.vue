@@ -11,7 +11,7 @@
           <el-input placeholder="请输入密码：" v-model="form.password" show-password></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="login">登录</el-button>
+          <el-button type="primary" @click="checkFrom">登录</el-button>
           <el-button @click="resert">重置</el-button>
         </el-form-item>
       </el-form>
@@ -20,6 +20,8 @@
 </template>
 
 <script>
+// 导入 login
+import { login } from '@/api/login'
 export default {
   name: 'LoginIndex',
   data () {
@@ -43,10 +45,13 @@ export default {
   },
   methods: {
     // 登录表单校验
-    login () {
-      this.$refs.loginForm.validate(valid => {
+    checkFrom () {
+      this.$refs.loginForm.validate(async valid => {
         if (!valid) return
-        console.log('success')
+        // usernam admin
+        // password admin
+        const { data } = await login(this.form)
+        console.log(data)
         // console.log('1111')
       })
     },
