@@ -45,15 +45,14 @@ export default {
     // 登录表单校验
     login () {
       this.$refs.loginForm.validate(valid => {
-        if (!valid) {
-          return
-        }
+        if (!valid) return
         console.log('success')
+        // console.log('1111')
       })
     },
     // 重置表单
     resert () {
-      this.$refs.form.validateField()
+      this.$refs.loginForm.resetFields()
     }
   }
 
