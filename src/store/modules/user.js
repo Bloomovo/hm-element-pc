@@ -1,4 +1,4 @@
-import { setToken, getToken } from '@/utils/storage'
+import { setToken, getToken, delToken } from '@/utils/storage'
 import { login } from '@/api/login'
 import { Message } from 'element-ui'
 import router from '@/router'
@@ -8,7 +8,7 @@ export default {
   namespaced: true,
   state () {
     return {
-      token: getToken()
+      token: getToken() || ''
     }
   },
   mutations: {
@@ -17,6 +17,12 @@ export default {
       // 跳到首页
       router.push('/')
       setToken(token)
+    },
+    // 用户退出
+    logout (state) {
+      // 删除token
+      state.token = ''
+      delToken()
     }
   },
   actions: {

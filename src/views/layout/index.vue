@@ -61,6 +61,8 @@ export default {
       this.name = data.name
     },
     handleConfirm () {
+      this.$message('退出')
+      this.$store.commit('user/logout')
       this.$router.push('/login')
     }
   }
