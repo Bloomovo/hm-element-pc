@@ -6,3 +6,8 @@ export const getArticleList = (data) => {
     params: data
   })
 }
+
+// 添加面经
+export const createArticle = data => {
+  return request.post('/admin/interview/create', data)
+}

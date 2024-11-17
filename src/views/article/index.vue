@@ -63,7 +63,7 @@
             <quill-editor v-model="form.content" @blur="$refs.form.validateField('content')"></quill-editor>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary">确认</el-button>
+            <el-button type="primary" @click="submit">确认</el-button>
             <el-button>取消</el-button>
           </el-form-item>
         </el-form>
@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { getArticleList } from '@/api/article.js'
+import { getArticleList, createArticle } from '@/api/article.js'
 import quillEditor from '@/utils/quill'
 export default {
   name: 'article-page',
@@ -128,8 +128,27 @@ export default {
     // 关闭抽屉
     handleClose (done) {
       this.$confirm('确认关闭？').then(_ => {
+        // 清空内容
+        this.$refs.form.resetFields()
         done()
       }).catch(_ => {})
+    },
+    // 添加面经
+    async submit () {
+      try {
+        // 校验
+        await this.$refs.form.validate()
+        // 请求
+        await createArticle(this.form)
+        // 提示
+        this.$message.success('添加成功')
+        this.drawer = false
+        // 重新渲染 新数据在第一页 返回第一页
+        this.current = 1
+        this.initData()
+      } catch (e) {
+        this.$message(e)
+      }
     }
   },
   computed: {
