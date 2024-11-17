@@ -25,6 +25,15 @@
         </el-table-column>
         <el-table-column prop="views" label="浏览数"> </el-table-column>
         <el-table-column prop="createdAt" label="更新时间" width="200"> </el-table-column>
+        <el-table-column label="操作" width="120px">
+          <template #default="{ row }">
+            <div class="actions">
+              <i class="el-icon-view"></i>
+              <i class="el-icon-edit-outline"></i>
+              <i class="el-icon-delete" @click="del(row.id)"></i>
+            </div>
+          </template>
+        </el-table-column>
       </el-table>
     </el-card>
   </div>
