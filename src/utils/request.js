@@ -1,5 +1,6 @@
 // 封装 axios 用于发送请求
 import axios from 'axios'
+import { Message } from 'element-ui'
 
 // 创建一个 axios 实例
 const request = axios.create({
@@ -20,9 +21,15 @@ request.interceptors.request.use(function (config) {
 // 添加响应拦截器
 request.interceptors.response.use(function (response) {
   // 对响应数据做点什么
-  return response.data
+  if (response) {
+    return response.data
+  }
 }, function (error) {
   // 对响应错误做点什么
+  if (error.response) {
+    Message.error(error.response.data.message)
+    return
+  }
   return Promise.reject(error)
 })
 

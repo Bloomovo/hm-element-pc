@@ -5,7 +5,7 @@ const KEY = 'my-token-element-pc'
 
 // 获取
 export const getToken = () => {
-  localStorage.getItem(KEY)
+  return localStorage.getItem(KEY)
 }
 
 // 设置
