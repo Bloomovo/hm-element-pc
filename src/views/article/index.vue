@@ -7,7 +7,7 @@
     <el-card shadow="never" border="false">
       <template #header>
         <div class="header">
-          <span>共 300 条记录</span>
+          <span>共 {{total}} 条记录</span>
           <el-button
             icon="el-icon-plus"
             size="small"
@@ -35,6 +35,16 @@
           </template>
         </el-table-column>
       </el-table>
+      <!-- 分页 -->
+      <el-pagination
+        background
+        @current-change="handleCurrentChange"
+        :current-page="current"
+        :page-size="pageSize"
+        layout="prev, pager, next"
+        :total="total"
+        >
+      </el-pagination>
     </el-card>
   </div>
 </template>
@@ -62,6 +72,12 @@ export default {
       })
       this.total = data.total
       this.list = data.rows
+    },
+    // 页码改变时
+    handleCurrentChange (index) {
+      // 重新渲染数据
+      this.current = index
+      this.initData()
     }
   }
 }
