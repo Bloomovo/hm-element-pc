@@ -2,6 +2,7 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
 import store from '@/store/index.js'
+import router from '@/router'
 // 创建一个 axios 实例
 const request = axios.create({
   // 基地址
@@ -31,8 +32,18 @@ request.interceptors.response.use(function (response) {
 }, function (error) {
   // 对响应错误做点什么
   if (error.response) {
-    Message.error(error.response.data.message)
-    return
+    if (error.response.status === 401) {
+      // 给提示，清除无效 token(vuex + 本地)，拦到登录
+      Message.error('尊敬的用户，当前登录状态过期！')
+
+      // 提交清除token的mutations
+      store.commit('user/logout')
+
+      // 退出
+      router.push('/login')
+    } else {
+      Message.error(error.response.data.message)
+    }
   }
   return Promise.reject(error)
 })
