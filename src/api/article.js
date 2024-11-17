@@ -20,3 +20,17 @@ export const removeArticle = id => {
     }
   })
 }
+
+// 文章详情
+export const getArticleDetail = id => {
+  return request.get('/admin/interview/show', {
+    params: {
+      id
+    }
+  })
+}
+
+// 修改功能
+export const updateArticle = data => {
+  return request.put('/admin/interview/update', data)
+}

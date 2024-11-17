@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { getArticleList, createArticle, removeArticle } from '@/api/article.js'
+import { getArticleList, createArticle, removeArticle, getArticleDetail, updateArticle } from '@/api/article.js'
 import quillEditor from '@/utils/quill'
 export default {
   name: 'article-page',
@@ -120,10 +120,17 @@ export default {
       this.initData()
     },
     // 打开抽屉
-    openDrawer (type, id) {
-      console.log(type, id)
+    async openDrawer (type, id) {
       this.drawer = true
       this.drawerType = type
+
+      // form 文章回显
+      if (type !== 'add') {
+        const res = await getArticleDetail(id)
+        this.form = {
+          ...res.data
+        }
+      }
     },
     // 关闭抽屉
     handleClose (done) {
@@ -133,15 +140,26 @@ export default {
         done()
       }).catch(_ => {})
     },
-    // 添加面经
+    // 添加面经和修改面经
     async submit () {
       try {
         // 校验
         await this.$refs.form.validate()
-        // 请求
-        await createArticle(this.form)
-        // 提示
-        this.$message.success('添加成功')
+        // 添加面经
+        if (this.drawerType === 'add') {
+          // 请求
+          await createArticle(this.form)
+          // 提示
+          this.$message.success('添加成功')
+        } else if (this.drawerType === 'edit') {
+          const { id, stem, content } = this.form
+          // 修改
+          await updateArticle({ id, stem, content })
+          // 提示
+          this.$message.success('修改成功')
+        }
+        // 修改面经
+
         // 关闭重置内容
         this.$refs.form.resetFields()
         this.drawer = false
