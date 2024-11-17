@@ -55,7 +55,11 @@
         :before-close="handleClose"
         size:="70%"
         >
-        <el-form ref="form" label-width="80px" :model="form" :rules="rules">
+        <div v-if="drawerType === 'preview'" class="article-preview">
+          <h5>{{ form.stem }}</h5>
+          <div v-html="form.content"></div>
+        </div>
+        <el-form v-else ref="form" label-width="80px" :model="form" :rules="rules">
           <el-form-item label="标题" prop="stem">
             <el-input  placeholder="输入面经标题" v-model="form.stem"></el-input>
           </el-form-item>
@@ -136,7 +140,10 @@ export default {
     handleClose (done) {
       this.$confirm('确认关闭？').then(_ => {
         // 清空内容
-        this.$refs.form.resetFields()
+        // 不能是预览
+        if (this.drawerType !== 'preview') {
+          this.$refs.form.resetFields()
+        }
         done()
       }).catch(_ => {})
     },
