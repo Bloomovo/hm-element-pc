@@ -11,3 +11,12 @@ export const getArticleList = (data) => {
 export const createArticle = data => {
   return request.post('/admin/interview/create', data)
 }
+
+// 删除功能
+export const removeArticle = id => {
+  return request.delete('/admin/interview/remove', {
+    data: {
+      id
+    }
+  })
+}

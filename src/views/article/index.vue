@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { getArticleList, createArticle } from '@/api/article.js'
+import { getArticleList, createArticle, removeArticle } from '@/api/article.js'
 import quillEditor from '@/utils/quill'
 export default {
   name: 'article-page',
@@ -142,6 +142,8 @@ export default {
         await createArticle(this.form)
         // 提示
         this.$message.success('添加成功')
+        // 关闭重置内容
+        this.$refs.form.resetFields()
         this.drawer = false
         // 重新渲染 新数据在第一页 返回第一页
         this.current = 1
@@ -149,6 +151,15 @@ export default {
       } catch (e) {
         this.$message(e)
       }
+    },
+    // 删除面经
+    async del (id) {
+      // 删除
+      await removeArticle(id)
+      // 提示
+      this.$message.success('删除成功')
+      // 重新渲染
+      this.initData()
     }
   },
   computed: {
