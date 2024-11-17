@@ -10,7 +10,7 @@ export const getToken = () => {
 
 // 设置
 export const setToken = (newKEY) => {
-  localStorage.setItem(KEY,newKEY)
+  localStorage.setItem(KEY, newKEY)
 }
 
 // 删除

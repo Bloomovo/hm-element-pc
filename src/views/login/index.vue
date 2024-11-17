@@ -20,8 +20,6 @@
 </template>
 
 <script>
-// 导入 login
-import { login } from '@/api/login'
 export default {
   name: 'LoginIndex',
   data () {
@@ -50,9 +48,7 @@ export default {
         if (!valid) return
         // usernam admin
         // password admin
-        const { data } = await login(this.form)
-        console.log(data)
-        // console.log('1111')
+        await this.$store.dispatch('user/loginAction', this.form)
       })
     },
     // 重置表单
