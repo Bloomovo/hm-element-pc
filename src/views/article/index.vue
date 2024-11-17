@@ -9,7 +9,7 @@
         <div class="header">
           <span>共 {{total}} 条记录</span>
           <el-button
-            @click="openDrawer('add')"
+            @click="openDrawer('add', 1)"
             icon="el-icon-plus"
             size="small"
             type="primary"
@@ -49,12 +49,24 @@
 
       <!-- 抽屉组件 -->
       <el-drawer
-        title="我是标题"
+        :title="drawerTitle"
         :visible.sync="drawer"
         :direction="direction"
         :before-close="handleClose"
+        size:="70%"
         >
-        <span>我来啦!</span>
+        <el-form ref="form" label-width="80px" :model="form" :rules="rules">
+          <el-form-item label="标题" prop="stem">
+            <el-input  placeholder="输入面经标题" v-model="form.stem"></el-input>
+          </el-form-item>
+          <el-form-item label="内容" prop="content">
+            <quill-editor v-model="form.content" @blur="$refs.form.validateField('content')"></quill-editor>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary">确认</el-button>
+            <el-button>取消</el-button>
+          </el-form-item>
+        </el-form>
       </el-drawer>
     </el-card>
   </div>
@@ -62,8 +74,12 @@
 
 <script>
 import { getArticleList } from '@/api/article.js'
+import quillEditor from '@/utils/quill'
 export default {
   name: 'article-page',
+  components: {
+    quillEditor
+  },
   data () {
     return {
       current: 1,
@@ -73,7 +89,16 @@ export default {
       // isshow
       drawer: false,
       // 打开方向
-      direction: 'rtl'
+      direction: 'rtl',
+      drawerType: '',
+      form: {
+        content: '', // 内容
+        stem: '' // 标题
+      },
+      rules: {
+        stem: [{ require: true, message: '请输入面经标题', trigger: 'blur' }],
+        content: [{ require: true, message: '请输入面经内容', trigger: 'blur' }]
+      }
     }
   },
   created () {
@@ -98,12 +123,22 @@ export default {
     openDrawer (type, id) {
       console.log(type, id)
       this.drawer = true
+      this.drawerType = type
     },
     // 关闭抽屉
     handleClose (done) {
       this.$confirm('确认关闭？').then(_ => {
         done()
       }).catch(_ => {})
+    }
+  },
+  computed: {
+    drawerTitle () {
+      let title = '大标题'
+      if (this.drawerType === 'add') title = '添加面经'
+      else if (this.drawerType === 'preview') title = '面经预览'
+      else title = '修改面经'
+      return title
     }
   }
 }
