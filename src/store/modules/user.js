@@ -1,6 +1,7 @@
 import { setToken, getToken } from '@/utils/storage'
 import { login } from '@/api/login'
 import { Message } from 'element-ui'
+import router from '@/router'
 
 // 本地化储存
 export default {
@@ -13,6 +14,8 @@ export default {
   mutations: {
     setUserToken (state, token) {
       state.token = token
+      // 跳到首页
+      router.push('/')
       setToken(token)
     }
   },
