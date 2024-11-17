@@ -9,6 +9,7 @@
         <div class="header">
           <span>共 {{total}} 条记录</span>
           <el-button
+            @click="openDrawer('add')"
             icon="el-icon-plus"
             size="small"
             type="primary"
@@ -28,8 +29,8 @@
         <el-table-column label="操作" width="120px">
           <template #default="{ row }">
             <div class="actions">
-              <i class="el-icon-view"></i>
-              <i class="el-icon-edit-outline"></i>
+              <i class="el-icon-view" @click="openDrawer('preview', row.id)"></i>
+              <i class="el-icon-edit-outline" @click="openDrawer('edit', row.id)"></i>
               <i class="el-icon-delete" @click="del(row.id)"></i>
             </div>
           </template>
@@ -45,6 +46,16 @@
         :total="total"
         >
       </el-pagination>
+
+      <!-- 抽屉组件 -->
+      <el-drawer
+        title="我是标题"
+        :visible.sync="drawer"
+        :direction="direction"
+        :before-close="handleClose"
+        >
+        <span>我来啦!</span>
+      </el-drawer>
     </el-card>
   </div>
 </template>
@@ -58,7 +69,11 @@ export default {
       current: 1,
       pageSize: 10,
       total: 0,
-      list: []
+      list: [],
+      // isshow
+      drawer: false,
+      // 打开方向
+      direction: 'rtl'
     }
   },
   created () {
@@ -78,6 +93,17 @@ export default {
       // 重新渲染数据
       this.current = index
       this.initData()
+    },
+    // 打开抽屉
+    openDrawer (type, id) {
+      console.log(type, id)
+      this.drawer = true
+    },
+    // 关闭抽屉
+    handleClose (done) {
+      this.$confirm('确认关闭？').then(_ => {
+        done()
+      }).catch(_ => {})
     }
   }
 }
